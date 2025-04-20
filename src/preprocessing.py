@@ -165,7 +165,7 @@ def process_mesh_data(train_df, DATA_PATH, split="train", file_id="protein_id", 
                 mesh_file += ".vtk"
 
             # Skip if already processed
-            out_path = os.path.join(DATA_PATH, "processed_mesh_data", row[file_id] + ".pt")
+            out_path = os.path.join(DATA_PATH, "processed_mesh_data", mesh_file.split(".")[0] + ".pt")
             if os.path.exists(out_path):
                 continue
 
@@ -208,13 +208,26 @@ def process_mesh_data(train_df, DATA_PATH, split="train", file_id="protein_id", 
             except Exception as e:
                 print(f"Error processing {mesh_file}: {e}")
 
-# Usage
-if __name__ == "__main__":
-    DATA_PATH = "./data"
-    # train_df = pd.read_csv(os.path.join(DATA_PATH, "train_set.csv"))
-    train_df = pd.DataFrame({"protein_id": ["112m_1_A_A_model1",
-                                            "110m_1_A_A_model1"], "class_id": [39, 39]})
-    process_mesh_data(train_df, DATA_PATH)
+import argparse
 
-    test_df = pd.DataFrame({"anonymised_protein_id": ["0.vtk"]})
+def get_args():
+    parser = argparse.ArgumentParser(description="Script configuration.")
+    parser.add_argument('--train_df', type=str, default='train_set.csv', help='Path to train set csv file')
+    parser.add_argument('--test_df', type=str, default='test_set.csv', help='Path to train set csv file')
+    parser.add_argument('--data_path', type=str, default='./data', help='Path to the input data directory')
+    return parser.parse_args()
+
+if __name__ == "__main__":
+    args = get_args()
+    TRAIN_DF = args.train_df
+    TEST_DF = args.test_df
+    DATA_PATH = args.data_path
+
+    train_df = pd.read_csv(os.path.join(DATA_PATH, TRAIN_DF))
+    test_df = pd.read_csv(os.path.join(DATA_PATH, TEST_DF))
+    # train_df = pd.DataFrame({"protein_id": ["112m_1_A_A_model1",
+    #                                         "110m_1_A_A_model1"], "class_id": [39, 39]})
+    # test_df = pd.DataFrame({"anonymised_protein_id": ["0.vtk"]})
+
+    process_mesh_data(train_df, DATA_PATH)
     process_mesh_data(test_df, DATA_PATH, split="test", file_id="anonymised_protein_id")

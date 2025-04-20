@@ -11,7 +11,7 @@ class LocalGCN(torch.nn.Module):
     def forward(self, x, edge_index, batch):
         x = self.conv1(x, edge_index).relu()
         x = self.conv2(x, edge_index).relu()
-        x = global_mean_pool(x, batch)  # One feature vector per graph
+        x = global_mean_pool(x, batch)
         return x
 
 class GlobalGCN(torch.nn.Module):
@@ -26,5 +26,5 @@ class GlobalGCN(torch.nn.Module):
     def forward(self, x, edge_index, edge_attr):
         x = self.conv1(x, edge_index, edge_attr).relu()
         x = self.conv2(x, edge_index, edge_attr).relu()
-        x = x.mean(dim=0)  # Global mean pooling
+        x = x.mean(dim=0) 
         return self.classifier(x)
