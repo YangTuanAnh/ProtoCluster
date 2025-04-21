@@ -1,11 +1,12 @@
 #!/bin/bash
 
+# ========== Configuration ==========
 DATA_PATH="./sample_data"
 OUTPUT_PATH="./output"
 TRAIN_CSV="train_set.csv"
 TEST_CSV="test_set.csv"
 
-# ANSI color codes
+# ========== ANSI Color Codes ==========
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
@@ -23,16 +24,18 @@ section() {
     divider
 }
 
+# ========== Summary ==========
 echo -e "${BOLD}${YELLOW}🔧 Configuration:${RESET}"
-echo -e "📁 Data path      : ${GREEN}$DATA_PATH${RESET}"
-echo -e "📁 Output path    : ${GREEN}$OUTPUT_PATH${RESET}"
-echo -e "📄 Train CSV      : ${GREEN}$TRAIN_CSV${RESET}"
-echo -e "📄 Test CSV       : ${GREEN}$TEST_CSV${RESET}"
+echo -e "📁 Data path   : ${GREEN}$DATA_PATH${RESET}"
+echo -e "📁 Output path : ${GREEN}$OUTPUT_PATH${RESET}"
+echo -e "📄 Train CSV   : ${GREEN}$TRAIN_CSV${RESET}"
+echo -e "📄 Test CSV    : ${GREEN}$TEST_CSV${RESET}"
 echo ""
 
 mkdir -p "$DATA_PATH"
 mkdir -p "$OUTPUT_PATH"
 
+# ========== Stage 0: Extract Training Data ==========
 section "📦 Extracting train_set_vtk.tar.gz"
 if [ -f "$DATA_PATH/train_set_vtk.tar.gz" ]; then
     tar --format=posix -xzf "$DATA_PATH/train_set_vtk.tar.gz" -C "$DATA_PATH"
@@ -40,9 +43,11 @@ else
     echo -e "${YELLOW}⚠️ train_set_vtk.tar.gz not found in $DATA_PATH${RESET}"
 fi
 
+# ========== Stage 1: Preprocessing Training Set ==========
 section "⚙️ Preprocessing (Training)"
 py -m src.preprocessing --data_path "$DATA_PATH" --input_csv "$TRAIN_CSV"
 
+# ========== Stage 2: Initial Training & Confusion Analysis ==========
 section "🧪 Stage 1 - Confusion Analysis"
 py -m src.train \
     --data_path "$DATA_PATH" \
@@ -64,6 +69,7 @@ py -m src.relabel_train_set \
     --train_csv "$TRAIN_CSV" \
     --num_classes 97
 
+# ========== Stage 3: Pretraining with Refined Labels ==========
 section "🧠 Stage 2 - Pretraining"
 py -m src.train \
     --data_path "$DATA_PATH" \
@@ -74,6 +80,7 @@ py -m src.train \
     --final_eval \
     --num_classes 97
 
+# ========== Stage 4: Finetuning with Pretrained Weights ==========
 section "🎯 Stage 3 - Finetuning"
 py -m src.train \
     --data_path "$DATA_PATH" \
@@ -86,6 +93,7 @@ py -m src.train \
     --load_local_gcn "$OUTPUT_PATH/local_gcn_weights_stage_2.pth" \
     --load_global_gcn "$OUTPUT_PATH/global_gcn_weights_stage_2.pth"
 
+# ========== Stage 5: Extract Test Data ==========
 section "📦 Extracting test_set_vtk.tar.gz"
 if [ -f "$DATA_PATH/test_set_vtk.tar.gz" ]; then
     tar --format=posix -xzf "$DATA_PATH/test_set_vtk.tar.gz" -C "$DATA_PATH"
@@ -93,8 +101,8 @@ else
     echo -e "${YELLOW}⚠️ test_set_vtk.tar.gz not found in $DATA_PATH${RESET}"
 fi
 
+# ========== Stage 6: Inference & Submission ==========
 section "📤 Submission Inference"
-
 start_time=$(date +%s)
 
 py -m src.preprocessing \
@@ -115,5 +123,4 @@ cp "$OUTPUT_PATH/pred_stage_3.csv" "$OUTPUT_PATH/submission.csv"
 end_time=$(date +%s)
 elapsed=$(( end_time - start_time ))
 echo -e "${GREEN}⏱️ Submission inference completed in ${elapsed} seconds.${RESET}"
-
 echo -e "${GREEN}${BOLD}✅ Done!${RESET} 🚀"

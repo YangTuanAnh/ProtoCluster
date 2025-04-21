@@ -13,6 +13,7 @@ frozenlist==1.6.0
 fsspec==2025.3.2
 idna==3.10
 Jinja2==3.1.6
+joblib==1.4.2
 kiwisolver==1.4.8
 MarkupSafe==3.0.2
 matplotlib==3.10.1
@@ -32,10 +33,13 @@ python-dateutil==2.9.0.post0
 pytz==2025.2
 pyvista==0.45.0
 requests==2.32.3
+scikit-learn==1.6.1
+scipy==1.15.2
 scooby==0.10.0
 setuptools==78.1.1
 six==1.17.0
 sympy==1.13.1
+threadpoolctl==3.6.0
 torch==2.6.0
 torch-geometric==2.6.1
 tqdm==4.67.1
