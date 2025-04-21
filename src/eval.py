@@ -46,7 +46,7 @@ if __name__ == "__main__":
     df = pd.read_csv(os.path.join(DATA_PATH, TEST_CSV))
     # df = pd.DataFrame({"protein_id": ["0.vtk"]})
     
-    all_graphs = df[PROTEIN_ID].map(lambda x: f"{x.split(".")[0]}.pt").tolist()
+    all_graphs = df[PROTEIN_ID].map(lambda x: f"{x.split('.')[0]}.pt").tolist()
     all_labels = [-1] * len(all_graphs)
 
     dataset = CommunityGraphDataset(all_graphs, all_labels, os.path.join(DATA_PATH, "processed_mesh_data"), preload=True)
