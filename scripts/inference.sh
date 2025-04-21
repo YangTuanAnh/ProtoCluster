@@ -54,7 +54,7 @@ python -m src.eval \
     --load_local_gcn "$WEIGHTS_PATH/local_gcn_weights_stage_3.pth" \
     --load_global_gcn "$WEIGHTS_PATH/global_gcn_weights_stage_3.pth"
 
-cp "$OUTPUT_PATH/pred_stage_3.csv" "$OUTPUT_PATH/submission.csv"
+cp "$OUTPUT_PATH/pred_inference.csv" "$OUTPUT_PATH/submission.csv"
 
 end_time=$(date +%s)
 elapsed=$(( end_time - start_time ))

@@ -1,27 +1,27 @@
-# ProtoCluster Knows Where the Bodies Are Buried (in the Protein)
+# **ProtoCluster Knows Where the Bodies Are Buried (in the Protein)**
 
 ## 🧬 Pipeline
 
-This pipeline processes `.vtk`-based datasets, trains a multi-stage GNN model, and generates final predictions suitable for submission.
+This pipeline processes `.vtk`-based structural biology datasets, trains a multi-stage graph neural network (GNN) model, and performs test-time inference to generate predictions suitable for submission.
 
 ---
 
-### 📖 Overview
+## 📖 Overview
 
-The pipeline is structured into multiple stages:
+The pipeline is structured in modular stages:
 
-1. **Installation**: Environment setup and dependency installation.
-2. **Data Preparation**: Downloading and extracting `.tar.gz` archives containing the `.vtk` files.
-3. **Stage 1 - Confusion Analysis**: Initial training and error identification.
-4. **Stage 2 - Pretraining**: Retraining with refined labels.
-5. **Stage 3 - Finetuning**: Final model training with pretrained weights.
-6. **Inference & Submission**: Running inference on test data and saving results.
+1. **Installation**: Setup environment and dependencies.
+2. **Data Preparation**: Download and extract `.tar.gz` files containing `.vtk` files.
+3. **Stage 1 - Confusion Analysis**: Initial training with error diagnosis.
+4. **Stage 2 - Pretraining**: Retraining using relabeled examples.
+5. **Stage 3 - Finetuning**: Final training stage using pretrained weights.
+6. **Inference (Submission)**: Run inference on test data with fully trained weights.
 
 ---
 
 ## ⚙️ Installation
 
-**For macOS / Linux:**
+**macOS / Linux**
 
 ```bash
 python -m venv .venv
@@ -29,7 +29,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-**For Windows:**
+**Windows**
 
 ```bash
 python -m venv .venv
@@ -41,7 +41,7 @@ pip install -r requirements.txt
 
 ## 📦 Data Download
 
-A helper script is provided to download sample datasets. If on Windows, run it with **Git Bash**.
+Download example `.vtk` datasets using the provided helper script. On Windows, use **Git Bash** to execute it:
 
 ```bash
 sh scripts/download_data.sh
@@ -49,14 +49,36 @@ sh scripts/download_data.sh
 
 ---
 
-## 🚀 Run the Pipeline
+## 🚀 Full Training Pipeline
 
 By default:
-- `$DATA_PATH = ./sample_data`
-- `$OUTPUT_PATH = ./output`
+- `DATA_PATH = ./sample_data`
+- `OUTPUT_PATH = ./output`
 
-You may replace `sample_data` with a full dataset (e.g., `./data`) if available.
+To run the full multi-stage pipeline:
 
 ```bash
 sh scripts/pipeline.sh
 ```
+
+For experiments on the full dataset, replace `./sample_data` with your full dataset path (e.g., `./data`).
+
+---
+
+## 🧪 Inference Only (Trained Weights)
+
+If you have trained models already (e.g., trained on the full dataset), you can skip training and run inference directly:
+
+```bash
+sh scripts/inference.sh
+```
+
+This uses pretrained weights located in `./weights/`, including:
+
+- `local_gcn_weights_stage_3.pth`
+- `global_gcn_weights_stage_3.pth`
+
+These are expected to be trained on the **entire training dataset**, not the sample. The script:
+- Preprocesses the test data.
+- Runs inference using the final GNN.
+- Saves predictions to `output/submission.csv`.
