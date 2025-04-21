@@ -61,7 +61,7 @@ if __name__ == "__main__":
     # TRAIN_CSV = pd.DataFrame({"protein_id": ["112m_1_A_A_model1",
     #                                         "110m_1_A_A_model1"], "class_id": [39, 39]})
 
-    all_graphs = TRAIN_CSV[PROTEIN_ID].map(lambda x: f"{x.split(".")[0]}.pt").tolist()
+    all_graphs = TRAIN_CSV[PROTEIN_ID].map(lambda x: f"{x.split('.')[0]}.pt").tolist()
     all_labels = TRAIN_CSV[CLASS_ID].tolist()
 
     if TRAIN_ALL:
