@@ -32,8 +32,10 @@ def get_args():
 
     parser.add_argument('--data_path', type=str, default='./data', help='Path to the input data directory')
     parser.add_argument('--output_path', type=str, default='./output', help='Path to the output directory')
-    parser.add_argument('--train_df', type=str, default='train_set.csv', help='Path to train set csv file')
+    parser.add_argument('--train_csv', type=str, default='train_set.csv', help='Path to train set csv file')
     parser.add_argument('--num_classes', type=int, default=97, help='Number of output classes')
+    parser.add_argument('--protein_id', type=str, default='protein_id', help='Column name for protein ID')
+    parser.add_argument('--class_id', type=str, default='class_id', help='Column name for class ID')
 
     return parser.parse_args()
 
@@ -43,13 +45,15 @@ if __name__ == "__main__":
 
     DATA_PATH = args.data_path
     OUTPUT_PATH = args.output_path
-    TRAIN_DF = args.train_df
+    TRAIN_CSV = args.train_csv
     NUM_CLASSES = args.num_classes
-    
+    PROTEIN_ID = args.protein_id
+    CLASS_ID = args.class_id
+
     with open(os.path.join(OUTPUT_PATH, "mistaken_groups.json"), "r") as f:
         mistaken_group = json.load(f)
 
-    train_df = pd.read_csv(os.path.join(DATA_PATH, TRAIN_DF))
+    train_df = pd.read_csv(os.path.join(DATA_PATH, TRAIN_CSV))
     # train_df = pd.DataFrame({"protein_id": ["112m_1_A_A_model1",
     #                                         "110m_1_A_A_model1"], "class_id": [39, 39]})
     
@@ -58,5 +62,5 @@ if __name__ == "__main__":
     superclass_map = build_sink_grouped_superclass_map(mistaken_group, NUM_CLASSES)
     superclass_labels = relabel_dataset_to_superclasses(all_labels, superclass_map)
 
-    relabeled_df = pd.DataFrame({"protein_id": train_df['protein_id'].values, "class_id": superclass_labels})
-    relabeled_df.to_csv(os.path.join(DATA_PATH, f"relabeled_{TRAIN_DF}"), index=False)
+    relabeled_df = pd.DataFrame({PROTEIN_ID: train_df[PROTEIN_ID].values, CLASS_ID: superclass_labels})
+    relabeled_df.to_csv(os.path.join(DATA_PATH, f"relabeled_{TRAIN_CSV}"), index=False)

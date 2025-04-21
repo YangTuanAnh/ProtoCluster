@@ -212,22 +212,23 @@ import argparse
 
 def get_args():
     parser = argparse.ArgumentParser(description="Script configuration.")
-    parser.add_argument('--train_df', type=str, default='train_set.csv', help='Path to train set csv file')
-    parser.add_argument('--test_df', type=str, default='test_set.csv', help='Path to train set csv file')
     parser.add_argument('--data_path', type=str, default='./data', help='Path to the input data directory')
+    parser.add_argument('--input_csv', type=str, default='train_set.csv', help='Path to train set csv file')
+    parser.add_argument('--split', type=str, default='train', help='Select data from whichever split')
+    parser.add_argument('--protein_id', type=str, default='protein_id', help='Column name for protein ID')
+
     return parser.parse_args()
 
 if __name__ == "__main__":
     args = get_args()
-    TRAIN_DF = args.train_df
-    TEST_DF = args.test_df
+    INPUT_CSV = args.input_csv
     DATA_PATH = args.data_path
+    SPLIT = args.split
+    PROTEIN_ID = args.protein_id
 
-    train_df = pd.read_csv(os.path.join(DATA_PATH, TRAIN_DF))
-    test_df = pd.read_csv(os.path.join(DATA_PATH, TEST_DF))
+    df = pd.read_csv(os.path.join(DATA_PATH, INPUT_CSV))
     # train_df = pd.DataFrame({"protein_id": ["112m_1_A_A_model1",
     #                                         "110m_1_A_A_model1"], "class_id": [39, 39]})
     # test_df = pd.DataFrame({"anonymised_protein_id": ["0.vtk"]})
 
-    process_mesh_data(train_df, DATA_PATH)
-    process_mesh_data(test_df, DATA_PATH, split="test", file_id="anonymised_protein_id")
+    process_mesh_data(df, DATA_PATH, split=SPLIT, file_id=PROTEIN_ID)

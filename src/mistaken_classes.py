@@ -13,6 +13,9 @@ def get_args():
     parser.add_argument('--data_path', type=str, default='./data', help='Path to the data directory')
     parser.add_argument('--output_path', type=str, default='./output', help='Path to save output')
     parser.add_argument('--suffix', type=str, default='stage_1', help='Suffix to distinguish different stages or runs')
+    parser.add_argument('--train_csv', type=str, default='train_set.csv', help='Path to train set csv file')
+    parser.add_argument('--protein_id', type=str, default='protein_id', help='Column name for protein ID')
+    parser.add_argument('--class_id', type=str, default='class_id', help='Column name for class ID')
 
     return parser.parse_args()
 
@@ -24,20 +27,23 @@ if __name__ == "__main__":
     DATA_PATH = args.data_path
     OUTPUT_PATH = args.output_path
     SUFFIX = args.suffix
+    TRAIN_CSV = args.train_csv
+    PROTEIN_ID = args.protein_id
+    CLASS_ID = args.class_id
 
     suffix = f"_{SUFFIX}" if SUFFIX is not None else ""
 
     df_pred = pd.read_csv(os.path.join(OUTPUT_PATH, f"pred{suffix}.csv"))
-    # train_df = pd.read_csv(os.path.join(DATA_PATH, "train_set.csv"))
-    train_df = pd.DataFrame({"protein_id": ["112m_1_A_A_model1",
-                                            "110m_1_A_A_model1"], "class_id": [39, 39]})
+    train_df = pd.read_csv(os.path.join(DATA_PATH, TRAIN_CSV))
+    # train_df = pd.DataFrame({PROTEIN_ID: ["112m_1_A_A_model1",
+    #                                         "110m_1_A_A_model1"], CLASS_ID: [39, 39]})
     
-    all_preds = df_pred['class_id'].values
+    all_preds = df_pred[CLASS_ID].values
     # Extract protein IDs from df_pred
-    graph_ids = df_pred['graph_id'].str.split('.').str[0]
+    graph_ids = df_pred[PROTEIN_ID].str.split('.').str[0]
 
     # Filter train_df where protein_id is in the extracted IDs
-    all_true = train_df[train_df['protein_id'].isin(graph_ids)]['class_id']
+    all_true = train_df[train_df[PROTEIN_ID].isin(graph_ids)][CLASS_ID]
 
     num_classes = 97
     all_labels = list(range(num_classes))  # Ensures all 97 classes are included

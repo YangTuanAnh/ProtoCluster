@@ -9,7 +9,6 @@ from src.dataset import CommunityGraphDataset
 from src.models import LocalGCN, GlobalGCN
 from src.collate import collate_fn
 from src.utils import (
-    train_val_split,
     collect_all_distances,
     get_global_distance_stats,
     preprocess_dataset_global_norm,
@@ -23,6 +22,7 @@ def get_args():
     
     parser.add_argument('--data_path', type=str, default='./data', help='Path to the data directory')
     parser.add_argument('--output_path', type=str, default='./output', help='Path to save model outputs')
+    parser.add_argument('--test_csv', type=str, default='train_set.csv', help='Path to train set csv file')
     parser.add_argument('--num_classes', type=int, default=97, help='Number of output classes')
     parser.add_argument('--hidden_layers', type=int, default=128, help='Number of hidden units in GCN')
     parser.add_argument('--suffix', type=str, default='stage_1', help='Optional suffix for model saving')
@@ -36,14 +36,15 @@ if __name__ == "__main__":
 
     DATA_PATH = args.data_path
     OUTPUT_PATH = args.output_path
+    TEST_CSV = args.test_csv
     NUM_CLASSES = args.num_classes
     HIDDEN_LAYERS = args.hidden_layers
     SUFFIX = args.suffix
     PROTEIN_ID = args.protein_id
     CLASS_ID = args.class_id
 
-    # test_df = pd.read_csv(os.path.join(DATA_PATH, "test_set.csv"))
-    df = pd.DataFrame({"protein_id": ["0.vtk"]})
+    df = pd.read_csv(os.path.join(DATA_PATH, TEST_CSV))
+    # df = pd.DataFrame({"protein_id": ["0.vtk"]})
     
     all_graphs = df[PROTEIN_ID].map(lambda x: f"{x.split(".")[0]}.pt").tolist()
     all_labels = [-1] * len(all_graphs)
@@ -106,5 +107,5 @@ if __name__ == "__main__":
 
                 all_preds.append(pred)
     
-    pred_df = pd.DataFrame({"graph_id": [item.split('.')[0] for item in all_graphs], "class_id": all_preds})
+    pred_df = pd.DataFrame({"protein_id": [item.split('.')[0] for item in all_graphs], "class_id": all_preds})
     pred_df.to_csv(os.path.join(OUTPUT_PATH, f"pred{suffix}.csv"), index=False)
