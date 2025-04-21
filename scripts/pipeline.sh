@@ -116,7 +116,9 @@ python -m src.eval \
     --output_path "$OUTPUT_PATH" \
     --test_csv "$TEST_CSV" \
     --suffix "stage_3" \
-    --protein_id "anonymised_protein_id"
+    --protein_id "anonymised_protein_id" \
+    --load_local_gcn "$OUTPUT_PATH/local_gcn_weights_stage_3.pth" \
+    --load_global_gcn "$OUTPUT_PATH/global_gcn_weights_stage_3.pth"
 
 cp "$OUTPUT_PATH/pred_stage_3.csv" "$OUTPUT_PATH/submission.csv"
 

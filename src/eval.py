@@ -28,6 +28,8 @@ def get_args():
     parser.add_argument('--suffix', type=str, default='stage_1', help='Optional suffix for model saving')
     parser.add_argument('--protein_id', type=str, default='protein_id', help='Column name for protein ID')
     parser.add_argument('--class_id', type=str, default='class_id', help='Column name for class ID')
+    parser.add_argument('--load_local_gcn', type=str, help='Load pretrained local GCN weights')
+    parser.add_argument('--load_global_gcn', type=str, help='Load pretrained global GCN weights')
 
     return parser.parse_args()
 
@@ -42,6 +44,8 @@ if __name__ == "__main__":
     SUFFIX = args.suffix
     PROTEIN_ID = args.protein_id
     CLASS_ID = args.class_id
+    LOAD_LOCAL_GCN = args.load_local_gcn
+    LOAD_GLOBAL_GCN = args.load_global_gcn
 
     df = pd.read_csv(os.path.join(DATA_PATH, TEST_CSV))
     # df = pd.DataFrame({"protein_id": ["0.vtk"]})
@@ -56,6 +60,9 @@ if __name__ == "__main__":
     local_gcn = local_gcn.to(device)
     global_gcn = GlobalGCN(in_channels=HIDDEN_LAYERS, hidden_channels=HIDDEN_LAYERS, num_classes=NUM_CLASSES)
     global_gcn = global_gcn.to(device)
+
+    local_gcn.load_state_dict(torch.load(LOAD_LOCAL_GCN, map_location="cpu"))
+    global_gcn.load_state_dict(torch.load(LOAD_GLOBAL_GCN, map_location="cpu"))
 
     optimizer = torch.optim.AdamW(list(local_gcn.parameters()) + list(global_gcn.parameters()), lr=1e-3)
     criterion = torch.nn.CrossEntropyLoss()
