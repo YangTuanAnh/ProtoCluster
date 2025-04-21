@@ -45,11 +45,11 @@ fi
 
 # ========== Stage 1: Preprocessing Training Set ==========
 section "⚙️ Preprocessing (Training)"
-py -m src.preprocessing --data_path "$DATA_PATH" --input_csv "$TRAIN_CSV"
+python -m src.preprocessing --data_path "$DATA_PATH" --input_csv "$TRAIN_CSV"
 
 # ========== Stage 2: Initial Training & Confusion Analysis ==========
 section "🧪 Stage 1 - Confusion Analysis"
-py -m src.train \
+python -m src.train \
     --data_path "$DATA_PATH" \
     --output_path "$OUTPUT_PATH" \
     --train_csv "$TRAIN_CSV" \
@@ -57,13 +57,13 @@ py -m src.train \
     --training \
     --final_eval
 
-py -m src.mistaken_classes \
+python -m src.mistaken_classes \
     --data_path "$DATA_PATH" \
     --output_path "$OUTPUT_PATH" \
     --suffix "stage_1" \
     --train_csv "$TRAIN_CSV"
 
-py -m src.relabel_train_set \
+python -m src.relabel_train_set \
     --data_path "$DATA_PATH" \
     --output_path "$OUTPUT_PATH" \
     --train_csv "$TRAIN_CSV" \
@@ -71,7 +71,7 @@ py -m src.relabel_train_set \
 
 # ========== Stage 3: Pretraining with Refined Labels ==========
 section "🧠 Stage 2 - Pretraining"
-py -m src.train \
+python -m src.train \
     --data_path "$DATA_PATH" \
     --output_path "$OUTPUT_PATH" \
     --train_csv "relabeled_$TRAIN_CSV" \
@@ -82,7 +82,7 @@ py -m src.train \
 
 # ========== Stage 4: Finetuning with Pretrained Weights ==========
 section "🎯 Stage 3 - Finetuning"
-py -m src.train \
+python -m src.train \
     --data_path "$DATA_PATH" \
     --output_path "$OUTPUT_PATH" \
     --train_csv "relabeled_$TRAIN_CSV" \
@@ -105,13 +105,13 @@ fi
 section "📤 Submission Inference"
 start_time=$(date +%s)
 
-py -m src.preprocessing \
+python -m src.preprocessing \
     --data_path "$DATA_PATH" \
     --input_csv "$TEST_CSV" \
     --split "test" \
     --protein_id "anonymised_protein_id"
 
-py -m src.eval \
+python -m src.eval \
     --data_path "$DATA_PATH" \
     --output_path "$OUTPUT_PATH" \
     --test_csv "$TEST_CSV" \
