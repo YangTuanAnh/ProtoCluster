@@ -1,4 +1,10 @@
+Here is your updated document with a properly formatted **Results on Test Set** section added. I am keeping the tone formal and structured to match the rest of your document.
+
+---
+
 # **ProtoCluster Knows Where the Bodies Are Buried (in the Protein)**
+
+![Architecture](architecture.png)
 
 ## 🧬 Pipeline
 
@@ -82,3 +88,17 @@ These are expected to be trained on the **entire training dataset**, not the sam
 - Preprocesses the test data.
 - Runs inference using the final GNN.
 - Saves predictions to `output/submission.csv`.
+
+---
+
+## 📊 Results on Test Set
+
+The final model was evaluated on the held-out test set, achieving the following results:
+
+| Metric             | Score    |
+|--------------------|----------|
+| Accuracy           | 0.71090  |
+| Balanced Accuracy  | 0.40483  |
+| F1-Score           | 0.66623  |
+| Recall             | 0.71090  |
+| Precision          | 0.69556  |
