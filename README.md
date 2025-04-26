@@ -1,7 +1,3 @@
-Here is your updated document with a properly formatted **Results on Test Set** section added. I am keeping the tone formal and structured to match the rest of your document.
-
----
-
 # **ProtoCluster Knows Where the Bodies Are Buried (in the Protein)**
 
 ![Architecture](architecture.png)
