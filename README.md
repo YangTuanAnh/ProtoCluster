@@ -1,4 +1,4 @@
-# **ProtoCluster Knows Where the Bodies Are Buried (in the Protein)**
+# **ProtoCluster**
 
 ![Architecture](architecture.png)
 
@@ -98,3 +98,15 @@ The final model was evaluated on the held-out test set, achieving the following 
 | F1-Score           | 0.66623  |
 | Recall             | 0.71090  |
 | Precision          | 0.69556  |
+
+## Citation
+```
+@article{Yacoub2025,
+  title = {Shrec 2025: Protein Surface Shape Retrieval Including Electrostatic Potential},
+  url = {http://dx.doi.org/10.2139/ssrn.5258950},
+  DOI = {10.2139/ssrn.5258950},
+  publisher = {Elsevier BV},
+  author = {Yacoub,  Taher and Depenveiller,  Camille and Tatsuma,  Atsushi and Barisin,  Tin and Rusakov,  Eugen and G\"{o}bel,  Udo and Peng,  Yuxu and Deng,  Shiqiang and Kagaya,  Yuki and Park,  Joon Hong and Kihara,  Daisuke and Guerra,  Marco and Palmieri,  Giorgio and Ranieri,  Andrea and Fugacci,  Ulderico and Biasotti,  Silvia and He,  Ruiwen and Benhabiles,  Halim and Cabani,  Adnane and Hammoudi,  Karim and Li,  Haotian and Huang,  Hao and Li,  Chunyan and Tehrani,  Alireza and Meng,  Fanwang and Heidar-Zadeh,  Farnaz and Yang,  Tuan-Anh and Montes,  Matthieu},
+  year = {2025}
+}
+```
