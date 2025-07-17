@@ -2,13 +2,13 @@
 
 ![Architecture](architecture.png)
 
-## 🧬 Pipeline
+## Pipeline
 
 This pipeline processes `.vtk`-based structural biology datasets, trains a multi-stage graph neural network (GNN) model, and performs test-time inference to generate predictions suitable for submission.
 
 ---
 
-## 📖 Overview
+## Overview
 
 The pipeline is structured in modular stages:
 
@@ -21,7 +21,7 @@ The pipeline is structured in modular stages:
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 **macOS / Linux**
 
@@ -41,7 +41,7 @@ pip install -r requirements.txt
 
 ---
 
-## 📦 Data Download
+## Data Download
 
 Download example `.vtk` datasets using the provided helper script. On Windows, use **Git Bash** to execute it:
 
@@ -51,7 +51,7 @@ sh scripts/download_data.sh
 
 ---
 
-## 🚀 Full Training Pipeline
+## Full Training Pipeline
 
 By default:
 - `DATA_PATH = ./sample_data`
@@ -67,7 +67,7 @@ For experiments on the full dataset, replace `./sample_data` with your full data
 
 ---
 
-## 🧪 Inference Only (Trained Weights)
+## Inference Only (Trained Weights)
 
 If you have trained models already (e.g., trained on the full dataset), you can skip training and run inference directly:
 
@@ -87,7 +87,7 @@ These are expected to be trained on the **entire training dataset**, not the sam
 
 ---
 
-## 📊 Results on Test Set
+## Results on Test Set
 
 The final model was evaluated on the held-out test set, achieving the following results:
 
