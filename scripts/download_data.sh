@@ -16,5 +16,5 @@ curl -O https://shrec2025.drugdesign.fr/files/test_set.tar.xz
 mkdir -p train_set_vtk
 mkdir -p test_set_vtk
 
-tar -xzf train_set.tar.xz -C train_set_vtk
-tar -xzf test_set.tar.xz -C test_set_vtk
+tar -xf train_set.tar.xz -C train_set_vtk
+tar -xf test_set.tar.xz -C test_set_vtk
